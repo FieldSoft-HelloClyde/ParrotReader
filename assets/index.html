@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>亦云阅读</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" type="text/css" href="CSS/Reader.css" />
+		<link rel="stylesheet" type="text/css" href="JQuery/jquery.mobile-1.4.5.min.css" />
+		<script src="JQuery/jquery.js" ></script>
+		<script src="JQuery/jquery.mobile-1.4.5.min.js" ></script>
+		<script>
+			//标题栏和工具栏的刷新
+			$(function() {
+				$( "[data-role='navbar']" ).navbar();
+				$( "[data-role='header'], [data-role='footer']" ).toolbar();
+			});
+			$( document ).on( "pagecontainerchange", function() {
+				var current = $( ".ui-page-active" ).jqmData( "title" );
+				$( "[data-role='navbar'] a.ui-btn-active" ).removeClass( "ui-btn-active" );
+				$( "[data-role='navbar'] a" ).each(function() {
+					if ( $( this ).text() === current ) {
+						$( this ).addClass( "ui-btn-active" );
+					}
+				});
+			});
+			//获取Android提供的书籍信息
+			$(document).on("ready",function(event){
+				var BookInfosJson = window.AndroidOperate.GetBookInfosJson();
+				var BooksLength;
+				var BookData;
+				//alert(BookInfosJson);
+				if (BookInfosJson == ""){
+					BooksLength = 0;
+				}
+				else{
+					BookData = eval('(' + window.AndroidOperate.GetBookInfosJson() + ')');
+					BooksLength = BookData.length;
+				}
+				var BookListHtmlString = "<div class=\"ui-grid-b\">";
+				for (var i=0;i < BooksLength + 1;i ++){
+					var BlockClass;
+					if (i % 3 == 0){
+						BlockClass = "a";
+					}
+					else if (i % 3 == 1){
+						BlockClass = "b";
+					}
+					else{
+						BlockClass = "c";
+					}
+					BookListHtmlString += "<div class=\"ui-block-" + BlockClass + "\">";
+					if (i == BooksLength){
+						BookListHtmlString += "<div class=\"BookBlockPlus\">";
+						BookListHtmlString += "<button class=\"ui-btn ui-shadow ui-corner-all ui-btn-icon-notext ui-icon-plus\">plus</button>";
+						BookListHtmlString += "<p>添加本地书籍</p>";
+					}
+					else{
+						BookListHtmlString += "<div class=\"BookBlock\">";
+						BookListHtmlString += "<button style=\"width:60px;height:75px;\" onclick=\"StartReader('" + BookData[i].BookZipFilePath + "');\">";
+						BookListHtmlString += "<img src=\"data:image/jpeg;base64," + BookData[i].CoverImgBase64 + "\" /></button>";
+						BookListHtmlString += "<p>" + BookData[i].BookTitle + "</p>";
+					}
+					BookListHtmlString += "</div></div>";
+				}
+				BookListHtmlString += "</div>";
+				$('#BookList').html(BookListHtmlString);
+			});
+
+			function StartReader(BookZipFilePath){
+				//alert(BookZipFilePath);
+				window.AndroidOperate.StartReader(BookZipFilePath);
+			}
+			
+		</script>
+	</head>
+  
+	<body>
+		<div data-role="header" data-position="fixed" data-theme="a">
+			<h1>亦云阅读</h1>
+			<a href="#PageSearch" data-icon="search" class="ui-btn-right">搜索</a>
+		</div>
+		
+		<div data-role="page" data-theme="a" id="PageHome" data-title="主页">
+			<div data-role="content" class="ui-content jqm-content jqm-fullwidth">
+				<ul data-role="listview" data-insert="true">
+					<li data-role="list-divider">小说风云榜</li>
+					<li>
+						<a href="#">
+							<img src="http://www.23wx.com/files/article/image/50/50046/50046s.jpg" style="margin-left:20px;margin-top:10px;"/>
+							<h3>我欲封天</h3>
+							<p>耳根</p>
+							<p>我若要有，天不可无。我若要无，天不许有！ 这是一个起始于第八山与第九山之间的故事，一个“我命如妖欲封天”的世界！</p>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<h3>雪鹰领主</h3>
+							<p>我吃西红柿</p>
+						</a>
+					</li>
+				</ul>
+	        </div>
+		</div>
+		
+		<div data-role="page" data-theme="a" id="PageBook" data-title="书架">
+			<div data-role="content" class="ui-content jqm-content jqm-fullwidth" id="BookList">
+				
+	        </div>
+		</div>
+		
+		<div data-role="page" data-theme="a" id="PageSet" data-title="设置">
+			<div class="ui-field-contain" id="theme-selector">
+				<div data-role="content" class="ui-content jqm-content jqm-fullwidth">
+					<fieldset data-role="controlgroup" data-type="horizontal">
+						<legend>主题:</legend>
+						<label for="a">白天</label>
+						<input type="radio" name="theme" id="a" checked>
+						<label for="b">夜间</label>
+						<input type="radio" name="theme" id="b">
+					</fieldset>
+		        </div>
+		  	</div>
+		</div>
+		
+		
+        <div data-role="footer" data-position="fixed" data-theme="a">
+      		<div data-role="navbar">
+				<ul>
+					<li><a href="#PageHome" data-icon="home" data-transition='none'>主页</a></li>
+					<li><a href="#PageBook" data-icon="grid" data-transition='none'>书架</a></li>
+					<li><a href="#PageSet" data-icon="gear" data-transition='none'>设置</a></li>
+				</ul>
+			</div>
+        </div>
+	</body>
+</html>

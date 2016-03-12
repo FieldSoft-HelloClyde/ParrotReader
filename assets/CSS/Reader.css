@@ -1,0 +1,23 @@
+.BookBlock{
+	text-align: center;
+}
+
+.BookBlock img{
+	width:60px;
+	height:75px;
+}
+
+.BookBlock button{
+	padding:0px;
+	margin:0px auto;
+	margin-top:10px;
+}
+
+.BookBlockPlus{
+	text-align: center;
+}
+
+.BookBlockPlus button{
+	margin:auto;
+	margin-top:30px;
+}
