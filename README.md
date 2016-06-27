@@ -14,6 +14,3 @@ Android的一个阅读器，采用混合开发，主界面使用JQM，看小说�
 ![004](https://github.com/FieldSoft-HelloClyde/ParrotReader/blob/master/Image/QQ%E6%88%AA%E5%9B%BE20160627124806.jpg?raw=true)
 
 
-注意：
-
-该项目只完成了基本的查看ZIP打包小说的功能，并且已经放弃更新。
